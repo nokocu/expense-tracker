@@ -1,6 +1,6 @@
 # nomoney - Expense Tracker
 
-Expense tracking web application built with Angular, .NET Core, and MS SQL Server.
+Expense tracking web application built with Angular, .NET Core and SQLite.
 
 ## Tech Stack
 - **Frontend**: Angular 17+, TypeScript
