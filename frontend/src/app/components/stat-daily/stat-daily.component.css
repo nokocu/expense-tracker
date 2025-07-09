@@ -1,0 +1,107 @@
+.component {
+  background-color: #080c14;
+  border: 1px solid #364153;
+  border-radius: 8px;
+  padding: 20px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.date-display {
+  font-size: 12px;
+  color: #a0a0a0;
+  margin-bottom: 20px;
+  text-transform: lowercase;
+}
+
+.expenses-container {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 15px;
+}
+
+.no-expenses {
+  color: #a0a0a0;
+  text-align: center;
+  padding: 40px 0;
+  font-size: 14px;
+}
+
+.expense-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid #364153;
+}
+
+.expense-item:last-child {
+  border-bottom: none;
+}
+
+.expense-info {
+  flex: 1;
+}
+
+.expense-category {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-transform: lowercase;
+}
+
+.expense-description {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.expense-amount {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2b7fff;
+  margin-left: 15px;
+}
+
+.daily-total {
+  border-top: 1px solid #364153;
+  padding-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-label {
+  font-size: 14px;
+  color: #a0a0a0;
+}
+
+.total-amount {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2b7fff;
+}
+
+.scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: #080c14;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background: #364153;
+  border-radius: 3px;
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: #4a5568;
+}

@@ -1,0 +1,48 @@
+.component {
+  background-color: #080c14;
+  border: 1px solid #364153;
+  border-radius: 8px;
+  padding: 20px;
+  height: fit-content;
+}
+
+.stat-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #a0a0a0;
+  text-transform: lowercase;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2b7fff;
+}
+
+.month-info {
+  font-size: 14px;
+  color: #a0a0a0;
+  text-align: center;
+  padding-top: 15px;
+  border-top: 1px solid #364153;
+  text-transform: capitalize;
+}

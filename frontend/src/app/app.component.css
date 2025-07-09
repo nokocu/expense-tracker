@@ -1,0 +1,56 @@
+.app-container {
+  min-height: 100vh;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nav-section {
+  margin-bottom: 20px;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+}
+
+.stat-monthly-section {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.stat-circle-section {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.calendar-section {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.stat-daily-section {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+@media (max-width: 768px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+  }
+
+  .stat-monthly-section,
+  .stat-circle-section,
+  .calendar-section,
+  .stat-daily-section {
+    grid-column: 1;
+  }
+
+  .stat-monthly-section { grid-row: 1; }
+  .stat-circle-section { grid-row: 2; }
+  .calendar-section { grid-row: 3; }
+  .stat-daily-section { grid-row: 4; }
+}

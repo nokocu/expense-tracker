@@ -1,0 +1,25 @@
+<div class="calendar-component">
+  <h2 class="stat-title">calendar</h2>
+  <div class="calendar-header">
+    <button class="nav-btn" (click)="previousMonth()">&lt;</button>
+    <span class="month-year">{{ currentMonth }} {{ currentYear }}</span>
+    <button class="nav-btn" (click)="nextMonth()">&gt;</button>
+  </div>
+  <div class="calendar-grid">
+    <div class="day-header" *ngFor="let day of dayHeaders">{{ day }}</div>
+    <div 
+      *ngFor="let day of calendarDays" 
+      class="calendar-day"
+      [class.other-month]="!day.isCurrentMonth"
+      [class.selected]="day.isSelected"
+      [class.today]="day.isToday"
+      (click)="selectDate(day.date)"
+    >
+      <div class="day-number">{{ day.dayNumber }}</div>
+      <div class="day-expenses" *ngIf="day.totalAmount > 0">
+        <div class="expense-bar" [style.background]="getDayColor(day)"></div>
+        <div class="expense-amount">{{ day.totalAmount | number:'1.0-0' }}</div>
+      </div>
+    </div>
+  </div>
+</div>

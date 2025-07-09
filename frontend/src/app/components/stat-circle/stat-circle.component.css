@@ -1,0 +1,79 @@
+.component {
+  background-color: #080c14;
+  border: 1px solid #364153;
+  border-radius: 8px;
+  padding: 20px;
+  height: fit-content;
+}
+
+.stat-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.chart-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.chart-canvas {
+  max-width: 200px;
+  max-height: 200px;
+}
+
+.chart-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.center-amount {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2b7fff;
+}
+
+.center-label {
+  font-size: 12px;
+  color: #a0a0a0;
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.legend-text {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  font-size: 12px;
+}
+
+.legend-name {
+  color: #ffffff;
+}
+
+.legend-amount {
+  color: #a0a0a0;
+}

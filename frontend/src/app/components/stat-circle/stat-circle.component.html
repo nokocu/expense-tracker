@@ -1,0 +1,19 @@
+<div class="component">
+  <h2 class="stat-title">category breakdown</h2>
+  <div class="chart-container">
+    <canvas #chartCanvas width="200" height="200" class="chart-canvas"></canvas>
+    <div class="chart-center">
+      <div class="center-amount">{{ totalAmount | number:'1.0-0' }}</div>
+      <div class="center-label">pln</div>
+    </div>
+  </div>
+  <div class="legend">
+    <div class="legend-item" *ngFor="let category of categories">
+      <div class="legend-color" [style.background-color]="category.categoryColor"></div>
+      <div class="legend-text">
+        <span class="legend-name">{{ category.categoryName }}</span>
+        <span class="legend-amount">{{ category.totalAmount | number:'1.0-0' }} pln</span>
+      </div>
+    </div>
+  </div>
+</div>
