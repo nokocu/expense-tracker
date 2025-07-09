@@ -19,4 +19,9 @@ export class NavComponent {
     // placeholder for future implementation
     console.log('currency change requested');
   }
+
+  changeTheme(): void {
+    // placeholder for future theme implementation
+    console.log('theme change requested');
+  }
 }

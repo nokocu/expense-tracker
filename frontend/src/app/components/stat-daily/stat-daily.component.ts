@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ExpenseService } from '../../services/expense.service';
-import { Expense } from '../../models/expense.model';
+import { Expense, CreateExpenseRequest } from '../../models/expense.model';
 
 @Component({
   selector: 'app-stat-daily',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './stat-daily.component.html',
   styleUrls: ['./stat-daily.component.css']
 })
@@ -15,6 +16,14 @@ export class StatDailyComponent implements OnInit, OnDestroy {
   expenses: Expense[] = [];
   selectedDate: Date = new Date();
   private subscription = new Subscription();
+  
+  // add expense mode
+  isAddingExpense: boolean = false;
+  newExpense = {
+    description: '',
+    categoryId: 1,
+    amount: 0
+  };
 
   private categoryColors: { [key: string]: string } = {
     'food': '#ff4444',
@@ -25,10 +34,21 @@ export class StatDailyComponent implements OnInit, OnDestroy {
     'shopping': '#ff8844'
   };
 
+  // all possible categories - will be loaded from API
+  allCategories: { id: number; name: string; color: string }[] = [
+    { id: 1, name: 'food', color: '#ff4444' },
+    { id: 2, name: 'transport', color: '#ffff44' },
+    { id: 3, name: 'entertainment', color: '#44ff44' },
+    { id: 4, name: 'healthcare', color: '#4444ff' },
+    { id: 5, name: 'shopping', color: '#ff8844' },
+    { id: 6, name: 'rent', color: '#ff44ff' }
+  ];
+
   constructor(private expenseService: ExpenseService) {}
 
   ngOnInit(): void {
     this.loadCurrentDayData();
+    this.loadCategories();
     
     // subscribe to date changes
     this.subscription.add(
@@ -96,6 +116,25 @@ export class StatDailyComponent implements OnInit, OnDestroy {
     );
   }
 
+  private loadCategories(): void {
+    this.subscription.add(
+      this.expenseService.getCategories().subscribe({
+        next: (categories) => {
+          // Update categories with API data
+          this.allCategories = categories.map(cat => ({
+            id: cat.id,
+            name: cat.name,
+            color: cat.color
+          }));
+        },
+        error: (error) => {
+          console.error('error loading categories:', error);
+          // Keep default categories as fallback
+        }
+      })
+    );
+  }
+
   getCategoryColor(categoryName: string): string {
     return this.categoryColors[categoryName.toLowerCase()] || '#ffffff';
   }
@@ -107,5 +146,68 @@ export class StatDailyComponent implements OnInit, OnDestroy {
   private isToday(date: Date): boolean {
     const today = new Date();
     return date.toDateString() === today.toDateString();
+  }
+
+  addExpense(): void {
+    this.isAddingExpense = true;
+    // Reset form
+    this.newExpense = {
+      description: '',
+      categoryId: 1,
+      amount: 0
+    };
+  }
+
+  cancelAddExpense(): void {
+    this.isAddingExpense = false;
+  }
+
+  saveExpense(): void {
+    // Validate form
+    if (!this.newExpense.description?.trim()) {
+      console.error('Description is required');
+      return;
+    }
+    
+    if (!this.newExpense.amount || this.newExpense.amount <= 0) {
+      console.error('Amount must be greater than 0');
+      return;
+    }
+    
+    if (!this.newExpense.categoryId) {
+      console.error('Category is required');
+      return;
+    }
+
+    // Create expense request
+    const expenseRequest: CreateExpenseRequest = {
+      amount: this.newExpense.amount,
+      description: this.newExpense.description.trim(),
+      categoryId: this.newExpense.categoryId,
+      date: this.selectedDate
+    };
+
+    console.log('Creating expense:', expenseRequest);
+
+    // Call service to save expense to database
+    this.subscription.add(
+      this.expenseService.createExpense(expenseRequest).subscribe({
+        next: (savedExpense) => {
+          console.log('Expense saved successfully:', savedExpense);
+          
+          // Reset form and exit add mode
+          this.isAddingExpense = false;
+          
+          // Reload expenses to get fresh data from database
+          this.loadExpensesForDate(this.selectedDate);
+        },
+        error: (error) => {
+          console.error('Error saving expense:', error);
+          
+          // Still exit add mode but show error
+          alert('Failed to save expense. Please try again.');
+        }
+      })
+    );
   }
 }

@@ -3,7 +3,9 @@
   border: 1px solid #364153;
   border-radius: 8px;
   padding: 20px;
-  height: fit-content;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
 }
 
 .stat-title {
@@ -17,7 +19,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 15px;
-  margin-bottom: 20px;
+  margin-bottom: auto;
 }
 
 .stat-item {
@@ -45,4 +47,5 @@
   padding-top: 15px;
   border-top: 1px solid #364153;
   text-transform: capitalize;
+  margin-top: auto;
 }

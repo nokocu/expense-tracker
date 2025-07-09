@@ -18,6 +18,16 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
   totalAmount: number = 0;
   private subscription = new Subscription();
 
+  // All possible categories with colors
+  allCategories = [
+    { categoryId: 1, categoryName: 'food', categoryColor: '#ff4444' },
+    { categoryId: 2, categoryName: 'transport', categoryColor: '#ffff44' },
+    { categoryId: 3, categoryName: 'entertainment', categoryColor: '#44ff44' },
+    { categoryId: 4, categoryName: 'healthcare', categoryColor: '#4444ff' },
+    { categoryId: 5, categoryName: 'shopping', categoryColor: '#ff8844' },
+    { categoryId: 6, categoryName: 'rent', categoryColor: '#ff44ff' }
+  ];
+
   constructor(private expenseService: ExpenseService) {}
 
   ngOnInit(): void {
@@ -55,19 +65,24 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         error: (error) => {
           console.error('error loading monthly stats:', error);
-          // fallback to demo data
-          this.categories = [
-            { categoryId: 1, categoryName: 'food', categoryColor: '#ff4444', totalAmount: 450, percentage: 36 },
-            { categoryId: 2, categoryName: 'transport', categoryColor: '#ffff44', totalAmount: 200, percentage: 16 },
-            { categoryId: 3, categoryName: 'entertainment', categoryColor: '#44ff44', totalAmount: 300, percentage: 24 },
-            { categoryId: 4, categoryName: 'healthcare', categoryColor: '#4444ff', totalAmount: 150, percentage: 12 },
-            { categoryId: 5, categoryName: 'shopping', categoryColor: '#ff8844', totalAmount: 150.75, percentage: 12 }
-          ];
-          this.totalAmount = 1250.75;
+          // keep empty state, don't load demo data
+          this.categories = [];
+          this.totalAmount = 0;
           this.drawChart();
         }
       })
     );
+  }
+
+  private loadDemoData(): void {
+    this.categories = [
+      { categoryId: 1, categoryName: 'food', categoryColor: '#ff4444', totalAmount: 450, percentage: 36 },
+      { categoryId: 2, categoryName: 'transport', categoryColor: '#ffff44', totalAmount: 200, percentage: 16 },
+      { categoryId: 3, categoryName: 'entertainment', categoryColor: '#44ff44', totalAmount: 300, percentage: 24 },
+      { categoryId: 4, categoryName: 'healthcare', categoryColor: '#4444ff', totalAmount: 150, percentage: 12 },
+      { categoryId: 5, categoryName: 'shopping', categoryColor: '#ff8844', totalAmount: 150.75, percentage: 12 }
+    ];
+    this.totalAmount = 1250.75;
   }
 
   private drawChart(): void {
@@ -113,6 +128,17 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
       ctx.fill();
 
       currentAngle += sliceAngle;
+    });
+  }
+
+  getDisplayCategories() {
+    return this.allCategories.map(cat => {
+      const activeCategory = this.categories.find(c => c.categoryId === cat.categoryId);
+      return {
+        ...cat,
+        totalAmount: activeCategory?.totalAmount || 0,
+        percentage: activeCategory?.percentage || 0
+      };
     });
   }
 }

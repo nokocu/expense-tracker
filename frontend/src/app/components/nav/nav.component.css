@@ -26,22 +26,40 @@
 .nav-button {
   background-color: #16285b;
   border: 1px solid #2b7fff;
-  color: #ffffff;
+  color: #2b7fff;
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
   font-family: 'Geist Mono', monospace;
   font-size: 12px;
-  transition: opacity 0.2s;
+  transition: all 0.2s;
 }
 
 .nav-button.secondary {
   background-color: #351759;
   border: 1px solid #ad46ff;
+  color: #ad46ff;
+}
+
+.nav-button.theme-button {
+  background-color: #1e2939;
+  border: 1px solid #4a5565;
+  color: #ffffff;
 }
 
 .nav-button:hover {
-  opacity: 0.8;
+  background-color: #2b7fff;
+  color: #ffffff;
+}
+
+.nav-button.secondary:hover {
+  background-color: #ad46ff;
+  color: #ffffff;
+}
+
+.nav-button.theme-button:hover {
+  background-color: #2a3a4d;
+  border-color: #2a3a4d;
 }
 
 @media (max-width: 768px) {

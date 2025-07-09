@@ -118,16 +118,23 @@ export class CalComponent implements OnInit, OnDestroy {
 
   private createCalendarDay(date: Date, isCurrentMonth: boolean): CalendarDay {
     const today = new Date();
-    const dailyExpense = this.dailyExpenses.find(de => 
-      de.date.toDateString() === date.toDateString()
-    );
+    
+    // normalize dates for comparison (set time to 00:00:00)
+    const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const normalizedSelected = new Date(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate());
+    
+    const dailyExpense = this.dailyExpenses.find(de => {
+      const expenseDate = new Date(de.date.getFullYear(), de.date.getMonth(), de.date.getDate());
+      return expenseDate.getTime() === normalizedDate.getTime();
+    });
 
     return {
       date: date,
       dayNumber: date.getDate(),
       isCurrentMonth: isCurrentMonth,
-      isSelected: date.toDateString() === this.selectedDate.toDateString(),
-      isToday: date.toDateString() === today.toDateString(),
+      isSelected: normalizedDate.getTime() === normalizedSelected.getTime(),
+      isToday: normalizedDate.getTime() === normalizedToday.getTime(),
       totalAmount: dailyExpense?.totalAmount || 0,
       categories: this.calculateCategoryTotals(dailyExpense?.expenses || [])
     };
@@ -145,7 +152,15 @@ export class CalComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.expenseService.getDailyExpenses(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1).subscribe({
         next: (expenses) => {
-          this.dailyExpenses = expenses;
+          // parse dates from string format to Date objects
+          this.dailyExpenses = expenses.map(de => ({
+            ...de,
+            date: new Date(de.date),
+            expenses: de.expenses.map(exp => ({
+              ...exp,
+              date: new Date(exp.date)
+            }))
+          }));
           this.updateCalendar();
         },
         error: (error) => {

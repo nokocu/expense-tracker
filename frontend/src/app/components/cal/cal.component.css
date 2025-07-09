@@ -25,7 +25,7 @@
 .nav-btn {
   background-color: #080c14;
   border: 1px solid #364153;
-  color: #ffffff;
+  color: #364153;
   width: 32px;
   height: 32px;
   border-radius: 4px;
@@ -38,6 +38,7 @@
 
 .nav-btn:hover {
   background-color: #364153;
+  color: #ffffff;
 }
 
 .month-year {
@@ -50,8 +51,10 @@
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: auto repeat(6, 1fr);
   gap: 2px;
   flex: 1;
+  min-height: 0;
 }
 
 .day-header {
@@ -66,13 +69,14 @@
   background-color: #080c14;
   border: 1px solid #364153;
   border-radius: 4px;
-  padding: 8px;
+  padding: 4px;
   cursor: pointer;
   position: relative;
-  min-height: 50px;
   display: flex;
   flex-direction: column;
   transition: all 0.2s;
+  overflow: hidden;
+  min-height: 0;
 }
 
 .calendar-day:hover {
@@ -94,9 +98,10 @@
 }
 
 .day-number {
-  font-size: 12px;
+  font-size: 11px;
   color: #ffffff;
   font-weight: 600;
+  line-height: 1;
 }
 
 .day-expenses {
@@ -108,13 +113,14 @@
 }
 
 .expense-bar {
-  height: 4px;
+  height: 3px;
   border-radius: 2px;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 .expense-amount {
-  font-size: 10px;
+  font-size: 9px;
   color: #a0a0a0;
   text-align: right;
+  line-height: 1;
 }
