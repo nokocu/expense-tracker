@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } fr
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ExpenseService } from '../../services/expense.service';
-import { MonthlyStats, CategoryExpense } from '../../models/expense.model';
+import { CategoryExpense, Category } from '../../models/expense.model';
 
 @Component({
   selector: 'app-stat-circle',
@@ -15,22 +15,14 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('chartCanvas', { static: false }) chartCanvas!: ElementRef<HTMLCanvasElement>;
   
   categories: CategoryExpense[] = [];
+  allCategories: Category[] = []; 
   totalAmount: number = 0;
   private subscription = new Subscription();
-
-  // all possible categories with colors
-  allCategories = [
-    { categoryId: 1, categoryName: 'food', categoryColor: '#ff4444' },
-    { categoryId: 2, categoryName: 'transport', categoryColor: '#ffff44' },
-    { categoryId: 3, categoryName: 'entertainment', categoryColor: '#44ff44' },
-    { categoryId: 4, categoryName: 'healthcare', categoryColor: '#4444ff' },
-    { categoryId: 5, categoryName: 'shopping', categoryColor: '#ff8844' },
-    { categoryId: 6, categoryName: 'rent', categoryColor: '#ff44ff' }
-  ];
 
   constructor(private expenseService: ExpenseService) {}
 
   ngOnInit(): void {
+    this.loadAllCategories();
     this.loadCurrentMonthData();
     
     // subscribe to date changes
@@ -55,6 +47,20 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadMonthlyStats(now.getFullYear(), now.getMonth() + 1);
   }
 
+  private loadAllCategories(): void {
+    this.subscription.add(
+      this.expenseService.getCategories().subscribe({
+        next: (categories) => {
+          this.allCategories = categories;
+        },
+        error: (error) => {
+          console.error('error loading categories:', error);
+          this.allCategories = [];
+        }
+      })
+    );
+  }
+
   private loadMonthlyStats(year: number, month: number): void {
     this.subscription.add(
       this.expenseService.getMonthlyStats(year, month).subscribe({
@@ -65,24 +71,12 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         error: (error) => {
           console.error('error loading monthly stats:', error);
-          // keep empty state, don't load demo data
           this.categories = [];
           this.totalAmount = 0;
           this.drawChart();
         }
       })
     );
-  }
-
-  private loadDemoData(): void {
-    this.categories = [
-      { categoryId: 1, categoryName: 'food', categoryColor: '#ff4444', totalAmount: 450, percentage: 36 },
-      { categoryId: 2, categoryName: 'transport', categoryColor: '#ffff44', totalAmount: 200, percentage: 16 },
-      { categoryId: 3, categoryName: 'entertainment', categoryColor: '#44ff44', totalAmount: 300, percentage: 24 },
-      { categoryId: 4, categoryName: 'healthcare', categoryColor: '#4444ff', totalAmount: 150, percentage: 12 },
-      { categoryId: 5, categoryName: 'shopping', categoryColor: '#ff8844', totalAmount: 150.75, percentage: 12 }
-    ];
-    this.totalAmount = 1250.75;
   }
 
   private drawChart(): void {
@@ -114,7 +108,7 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    let currentAngle = -Math.PI / 2; // start from top
+    let currentAngle = -Math.PI / 2;
 
     this.categories.forEach(category => {
       const sliceAngle = (category.percentage / 100) * 2 * Math.PI;
@@ -131,14 +125,34 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  getDisplayCategories() {
-    return this.allCategories.map(cat => {
-      const activeCategory = this.categories.find(c => c.categoryId === cat.categoryId);
-      return {
-        ...cat,
-        totalAmount: activeCategory?.totalAmount || 0,
-        percentage: activeCategory?.percentage || 0
-      };
+  getDisplayCategories(): CategoryExpense[] {
+    console.log('API categories:', this.categories);
+    console.log('All categories from API:', this.allCategories);
+    
+    // create a map of expense categories by ID for quick lookup
+    const expenseMap = new Map(this.categories.map(cat => [cat.categoryId, cat]));
+    
+    // map all categories and fill with expense data or default to 0
+    const result = this.allCategories.map(category => {
+      const expenseCategory = expenseMap.get(category.id);
+      
+      if (expenseCategory) {
+        // use expense data if available
+        return expenseCategory;
+      } else {
+        // create category with 0 amount if no expenses
+        return {
+          categoryId: category.id,
+          categoryName: category.name,
+          categoryColor: category.color,
+          totalAmount: 0,
+          percentage: 0
+        };
+      }
     });
+    
+    console.log('Final display categories:', result);
+    
+    return result;
   }
 }
