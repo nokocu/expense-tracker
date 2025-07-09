@@ -41,7 +41,11 @@
   align-items: flex-start;
   padding: 12px 0;
   border-bottom: 1px solid #364153;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
 }
+
 
 .expense-item:last-child {
   border-bottom: none;
@@ -222,4 +226,51 @@
 .add-expense-btn:hover {
   background-color: #2b7fff;
   color: #ffffff;
+}
+
+/* Delete overlay styles */
+.delete-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.212);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: 4px;
+}
+
+.delete-overlay.visible {
+  opacity: 1;
+}
+
+.delete-overlay.deleting {
+  /* background-color: rgba(255, 255, 255, 0); */
+}
+
+.delete-text {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: lowercase;
+  z-index: 2;
+  position: relative;
+}
+
+.delete-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: rgb(255, 83, 83);
+  transition: width 0.02s linear;
+
+}
+
+.expense-item:hover .delete-overlay {
+  opacity: 1;
 }

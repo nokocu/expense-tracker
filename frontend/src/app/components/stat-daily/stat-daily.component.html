@@ -7,7 +7,12 @@
     <div *ngIf="expenses.length === 0" class="no-expenses">
       no expenses for this day
     </div>
-    <div *ngFor="let expense of expenses" class="expense-item">
+    <div *ngFor="let expense of expenses" class="expense-item" 
+         (mouseenter)="onExpenseHover(expense, true)"
+         (mouseleave)="onExpenseHover(expense, false)"
+         (mousedown)="startDeleteTimer(expense)"
+         (mouseup)="cancelDeleteTimer()"
+         (mouseleave)="cancelDeleteTimer()">
       <div class="expense-info">
         <div class="expense-category" [style.color]="getCategoryColor(expense.categoryName)">
           {{ expense.categoryName }}
@@ -15,6 +20,15 @@
         <div class="expense-description">{{ expense.description }}</div>
       </div>
       <div class="expense-amount">{{ expense.amount | number:'1.2-2' }} pln</div>
+      
+      <!-- Delete overlay -->
+      <div class="delete-overlay" 
+           [class.visible]="expense.id === hoveredExpenseId"
+           [class.deleting]="expense.id === deletingExpenseId">
+        <div class="delete-text">delete</div>
+        <div class="delete-progress" 
+             [style.width.%]="expense.id === deletingExpenseId ? deleteProgress : 0"></div>
+      </div>
     </div>
   </div>
   

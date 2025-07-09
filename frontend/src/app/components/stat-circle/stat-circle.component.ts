@@ -126,9 +126,6 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getDisplayCategories(): CategoryExpense[] {
-    console.log('API categories:', this.categories);
-    console.log('All categories from API:', this.allCategories);
-    
     // create a map of expense categories by ID for quick lookup
     const expenseMap = new Map(this.categories.map(cat => [cat.categoryId, cat]));
     
@@ -150,8 +147,6 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
         };
       }
     });
-    
-    console.log('Final display categories:', result);
     
     return result;
   }

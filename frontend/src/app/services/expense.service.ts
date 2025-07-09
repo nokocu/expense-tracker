@@ -63,4 +63,10 @@ export class ExpenseService {
   getDailyExpenses(year: number, month: number): Observable<DailyExpense[]> {
     return this.http.get<DailyExpense[]>(`${this.apiUrl}/statistics/daily/${year}/${month}`);
   }
+
+  // trigger data refresh for all components
+  refreshData(): void {
+    // emit the current date again to trigger all subscriptions
+    this.selectedDateSubject.next(this.selectedDateSubject.value);
+  }
 }

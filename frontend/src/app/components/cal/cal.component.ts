@@ -43,11 +43,9 @@ export class CalComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.expenseService.selectedDate$.subscribe(date => {
         this.selectedDate = date;
-        this.generateCalendar();
+        this.loadExpenses();
       })
     );
-    
-    this.loadExpenses();
   }
 
   ngOnDestroy() {

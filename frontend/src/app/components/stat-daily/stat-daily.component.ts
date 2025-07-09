@@ -25,6 +25,13 @@ export class StatDailyComponent implements OnInit, OnDestroy {
     amount: 0
   };
 
+  // delete functionality
+  hoveredExpenseId: number | null = null;
+  deletingExpenseId: number | null = null;
+  deleteProgress: number = 0;
+  private deleteTimer: any = null;
+  private deleteInterval: any = null;
+
   private categoryColors: { [key: string]: string } = {
     'food': '#ff4444',
     'entertainment': '#44ff44',
@@ -198,12 +205,65 @@ export class StatDailyComponent implements OnInit, OnDestroy {
           
           // reload expenses to get fresh data from database
           this.loadExpensesForDate(this.selectedDate);
+          
+          // trigger refresh for all other components
+          this.expenseService.refreshData();
         },
         error: (error) => {
           console.error('Error saving expense:', error);
           
           // still exit add mode but show error
           alert('Failed to save expense. Please try again.');
+        }
+      })
+    );
+  }
+
+  // Delete functionality methods
+  onExpenseHover(expense: Expense, isHovering: boolean): void {
+    this.hoveredExpenseId = isHovering ? expense.id : null;
+  }
+
+  startDeleteTimer(expense: Expense): void {
+    if (this.isAddingExpense) return; // Don't allow delete while adding expense
+    
+    this.deletingExpenseId = expense.id;
+    this.deleteProgress = 0;
+    
+    // Start progress animation
+    this.deleteInterval = setInterval(() => {
+      this.deleteProgress += 2; // 50 updates over 1 second (100% / 50 = 2%)
+      if (this.deleteProgress >= 100) {
+        this.deleteExpense(expense);
+      }
+    }, 20); // Update every 20ms for smooth animation
+  }
+
+  cancelDeleteTimer(): void {
+    if (this.deleteInterval) {
+      clearInterval(this.deleteInterval);
+      this.deleteInterval = null;
+    }
+    this.deletingExpenseId = null;
+    this.deleteProgress = 0;
+  }
+
+  private deleteExpense(expense: Expense): void {
+    this.cancelDeleteTimer();
+    
+    this.subscription.add(
+      this.expenseService.deleteExpense(expense.id).subscribe({
+        next: () => {
+          // Remove expense from local array
+          this.expenses = this.expenses.filter(e => e.id !== expense.id);
+          console.log('Expense deleted successfully');
+          
+          // trigger refresh for all other components
+          this.expenseService.refreshData();
+        },
+        error: (error) => {
+          console.error('Error deleting expense:', error);
+          alert('Failed to delete expense. Please try again.');
         }
       })
     );
