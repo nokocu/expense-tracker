@@ -1,9 +1,15 @@
-<div class="calendar-container">
-  <div class="calendar-header">
-    <button (click)="previousMonth()" class="nav-btn">&lt;</button>
-    <h2>{{ getMonthName() }}</h2>
-    <button (click)="nextMonth()" class="nav-btn">&gt;</button>
-  </div>
+<mat-card class="calendar-container">
+  <mat-toolbar class="calendar-header" color="primary">
+    <button mat-icon-button (click)="previousMonth()" class="nav-btn">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <span class="spacer"></span>
+    <h2 class="month-title">{{ getMonthName() }}</h2>
+    <span class="spacer"></span>
+    <button mat-icon-button (click)="nextMonth()" class="nav-btn">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </mat-toolbar>
 
   <div class="calendar-grid">
     <div class="weekday-header">Mon</div>
@@ -15,12 +21,16 @@
     <div class="weekday-header">Sun</div>
 
     @for (day of calendarDays(); track day.date) {
-      <div 
+      <mat-card 
         class="calendar-day"
         [class.selected]="selectedDate() && day.date.toDateString() === selectedDate()!.toDateString()"
         [class.today]="isToday(day.date)"
         [class.other-month]="day.isOtherMonth"
-        (click)="selectDay(day)">
+        (click)="selectDay(day)"
+        [matBadge]="day.totalAmount > 0 ? currencyService.formatAmount(day.totalAmount) : ''"
+        [matBadgeHidden]="day.totalAmount === 0"
+        matBadgeColor="accent"
+        matBadgeSize="small">
         
         <div class="day-number">{{ day.date.getDate() }}</div>
         
@@ -34,28 +44,31 @@
               </div>
             }
           </div>
-          <div class="total-amount">{{ currencyService.formatAmount(day.totalAmount) }}</div>
         }
-      </div>
+      </mat-card>
     }
   </div>
 
   @if (selectedDate()) {
-    <div class="day-details">
+    <mat-divider></mat-divider>
+    <mat-card-content class="day-details">
       <h3>Expenses for {{ selectedDate()!.toLocaleDateString() }}</h3>
       @for (day of calendarDays(); track day.date) {
         @if (day.date.toDateString() === selectedDate()!.toDateString()) {
           @for (expense of day.expenses; track expense.id) {
-            <div class="expense-item">
-              <span class="expense-category" [style.background-color]="expense.categoryColor">
-                {{ expense.categoryName }}
-              </span>
+            <mat-chip-row class="expense-item">
+              <mat-icon 
+                matChipAvatar 
+                [style.background-color]="expense.categoryColor"
+                class="expense-category-icon">
+                category
+              </mat-icon>
               <span class="expense-description">{{ expense.description }}</span>
               <span class="expense-amount">{{ currencyService.formatAmount(expense.amount) }}</span>
-            </div>
+            </mat-chip-row>
           }
         }
       }
-    </div>
+    </mat-card-content>
   }
-</div>
+</mat-card>

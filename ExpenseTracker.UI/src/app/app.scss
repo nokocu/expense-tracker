@@ -1,24 +1,28 @@
 .app-container {
   min-height: 100vh;
-  background: rgb(88, 153, 88);
-  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 0;
 }
 
 .app-header {
   text-align: center;
   color: white;
-  margin-bottom: 30px;
+  padding: 40px 20px;
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
   
   h1 {
     font-size: 2.5rem;
     margin: 0 0 10px 0;
-    font-weight: 300;
+    font-weight: 400;
+    letter-spacing: 1px;
   }
   
   p {
     font-size: 1.1rem;
     opacity: 0.9;
     margin: 0;
+    font-weight: 300;
   }
 }
 
@@ -27,15 +31,47 @@ main {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
+  padding: 20px;
 }
 
-
+// Responsive layout
 @media (min-width: 1024px) {
   main {
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 30px;
+    grid-template-columns: 400px 1fr;
+    grid-template-rows: auto auto 1fr;
+    gap: 20px;
     align-items: start;
+    
+    app-form {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    
+    app-statistics {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    
+    app-calendar {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    padding: 30px 15px;
+    
+    h1 {
+      font-size: 2rem;
+    }
+  }
+  
+  main {
+    padding: 15px;
+    gap: 15px;
   }
 }

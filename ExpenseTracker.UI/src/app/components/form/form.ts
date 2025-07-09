@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ExpenseService } from '../../services/expense';
@@ -6,13 +6,37 @@ import { CategoryService } from '../../services/category';
 import { CurrencyService } from '../../services/currency';
 import { CreateExpense, Category } from '../../models/expense.model';
 
+// Angular Material imports
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+
+// GSAP for animations
+import { gsap } from 'gsap';
+
 @Component({
   selector: 'app-form',
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule, 
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCardModule,
+    MatIconModule
+  ],
   templateUrl: './form.html',
   styleUrl: './form.scss'
 })
-export class FormComponent implements OnInit {
+export class FormComponent implements OnInit, AfterViewInit {
   categories = signal<Category[]>([]);
   
   expense: CreateExpense = {
@@ -26,11 +50,21 @@ export class FormComponent implements OnInit {
   constructor(
     private expenseService: ExpenseService,
     private categoryService: CategoryService,
-    public currencyService: CurrencyService
+    public currencyService: CurrencyService,
+    private elementRef: ElementRef
   ) {}
   
   ngOnInit() {
     this.loadCategories();
+  }
+
+  ngAfterViewInit() {
+    // GSAP animation on component load
+    gsap.fromTo(
+      this.elementRef.nativeElement.querySelector('mat-card'),
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
+    );
   }
   
   loadCategories() {

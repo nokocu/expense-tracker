@@ -1,17 +1,39 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ElementRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExpenseService } from '../../services/expense';
 import { CategoryService } from '../../services/category';
 import { CurrencyService } from '../../services/currency';
 import { Expense, Category, DayExpense } from '../../models/expense.model';
 
+// Angular Material imports
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatBadgeModule } from '@angular/material/badge';
+
+// GSAP for animations
+import gsap from 'gsap';
+
 @Component({
   selector: 'app-calendar',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatChipsModule,
+    MatToolbarModule,
+    MatDividerModule,
+    MatBadgeModule
+  ],
   templateUrl: './calendar.html',
   styleUrl: './calendar.scss'
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, AfterViewInit {
+  @Output() currentMonthChange = new EventEmitter<Date>();
   currentDate = signal(new Date());
   calendarDays = signal<DayExpense[]>([]);
   categories = signal<Category[]>([]);
@@ -20,16 +42,48 @@ export class CalendarComponent implements OnInit {
   constructor(
     private expenseService: ExpenseService,
     private categoryService: CategoryService,
-    public currencyService: CurrencyService
+    public currencyService: CurrencyService,
+    private elementRef: ElementRef
   ) {}
   
   ngOnInit() {
     // set today as the default selected date
     const today = new Date();
     this.selectedDate.set(today);
-    
+    this.emitCurrentMonth();
     this.loadCategories();
     this.loadCalendarData();
+  }
+
+  ngAfterViewInit() {
+
+    // initial container setup
+    const calendarContainer = this.elementRef.nativeElement.querySelector('.calendar-container');
+    if (calendarContainer) {
+      gsap.set(calendarContainer, { opacity: 1 });
+    }
+  }
+  
+  private animateCalendarEntrance() {
+    // small delay
+    setTimeout(() => {
+      const calendarContainer = this.elementRef.nativeElement.querySelector('.calendar-container');
+      const calendarDays = this.elementRef.nativeElement.querySelectorAll('.calendar-day');
+      
+      if (calendarDays && calendarDays.length > 0) {
+        gsap.fromTo(calendarDays,
+          { opacity: 0, y: 20, scale: 0.9 },
+          { 
+            opacity: 1, 
+            y: 0, 
+            scale: 1,
+            duration: 0.4, 
+            stagger: 0.02, 
+            ease: "back.out(1.7)"
+          }
+        );
+      }
+    }, 50);
   }
   
   loadCategories() {
@@ -102,6 +156,7 @@ export class CalendarComponent implements OnInit {
     }
     
     this.calendarDays.set(days);
+    this.animateCalendarEntrance();
   }
   
   private createDayExpense(date: Date, dayExpenses: Expense[], isOtherMonth: boolean): DayExpense {
@@ -132,16 +187,23 @@ export class CalendarComponent implements OnInit {
   
   previousMonth() {
     const current = this.currentDate();
-    this.currentDate.set(new Date(current.getFullYear(), current.getMonth() - 1, 1));
+    const newDate = new Date(current.getFullYear(), current.getMonth() - 1, 1);
+    this.currentDate.set(newDate);
+    this.emitCurrentMonth();
     this.loadCalendarData();
     this.selectTodayIfInCurrentMonth();
   }
   
   nextMonth() {
     const current = this.currentDate();
-    this.currentDate.set(new Date(current.getFullYear(), current.getMonth() + 1, 1));
+    const newDate = new Date(current.getFullYear(), current.getMonth() + 1, 1);
+    this.currentDate.set(newDate);
+    this.emitCurrentMonth();
     this.loadCalendarData();
     this.selectTodayIfInCurrentMonth();
+  }
+  private emitCurrentMonth() {
+    this.currentMonthChange.emit(this.currentDate());
   }
   
   selectDay(day: DayExpense) {

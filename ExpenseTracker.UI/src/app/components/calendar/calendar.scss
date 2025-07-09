@@ -1,33 +1,25 @@
 .calendar-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.calendar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  max-width: 900px;
+  margin: 20px auto;
+  overflow: hidden;
   
-  h2 {
-    margin: 0;
-    font-size: 1.5rem;
-    color: #333;
-  }
-  
-  .nav-btn {
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    font-size: 1.2rem;
+  .calendar-header {
+    .spacer {
+      flex: 1;
+    }
     
-    &:hover {
-      background: #0056b3;
+    .month-title {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
+    
+    .nav-btn {
+      transition: transform 0.2s ease;
+      
+      &:hover {
+        transform: scale(1.1);
+      }
     }
   }
 }
@@ -35,131 +27,128 @@
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 1px;
-  background: #dddddd67;
-  border: 1px solid #ddd;
+  gap: 8px;
+  padding: 16px;
+  background: var(--mdc-theme-surface);
 }
 
 .weekday-header {
-  background: #f8f9fa;
-  padding: 10px;
+  padding: 12px 8px;
   text-align: center;
-  font-weight: bold;
-  color: #666;
+  font-weight: 600;
+  color: var(--mdc-theme-on-surface);
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
 }
 
 .calendar-day {
-  background: rgba(255, 255, 255, 0);
-  min-height: 100px;
-  border: 1px solid #dddddd1e;
-  padding: 8px;
-  cursor: pointer;
   position: relative;
+  min-height: 80px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 8px !important;
+  margin: 0;
+  border-radius: 8px;
   
   &:hover {
-    background: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
   
   &.selected {
-    background: #e3f2fd;
-    border: 2px solid #2196f3;
+    background: var(--mdc-theme-primary) !important;
+    color: var(--mdc-theme-on-primary);
+    
+    .day-number {
+      color: var(--mdc-theme-on-primary);
+    }
   }
   
   &.today {
-    background: rgba(255, 193, 7, 0.1);
-    border: 2px solid #ffc107;
+    background: rgba(255, 193, 7, 0.1) !important;
+    border: 2px solid var(--mdc-theme-secondary);
     
     .day-number {
-      color: #ff6f00;
+      color: var(--mdc-theme-secondary);
       font-weight: 900;
     }
   }
   
   &.today.selected {
-    background: rgba(33, 150, 243, 0.2);
-    border: 2px solid #2196f3;
+    background: var(--mdc-theme-primary) !important;
+    border: 2px solid var(--mdc-theme-secondary);
     box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.3);
   }
   
   &.other-month {
-    opacity: 0.3;
+    opacity: 0.4;
     
     .day-number {
-      color: #999;
+      color: var(--mdc-theme-on-surface);
     }
     
     &:hover {
-      opacity: 0.6;
+      opacity: 0.7;
     }
   }
 }
 
 .day-number {
-  font-weight: bold;
-  color: #333;
+  font-weight: 600;
+  color: var(--mdc-theme-on-surface);
   margin-bottom: 4px;
+  font-size: 1rem;
 }
 
 .expense-bars {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
   margin: 4px 0;
+  width: 100%;
 }
 
 .category-bar {
-  height: 3px;
-  border-radius: 1px;
-  min-width: 2px;
-}
-
-.total-amount {
-  font-size: 0.75rem;
-  color: #666;
-  text-align: center;
-  margin-top: 4px;
+  height: 4px;
+  border-radius: 2px;
+  min-width: 4px;
+  transition: all 0.2s ease;
 }
 
 .day-details {
-  margin-top: 20px;
-  padding: 20px;
-  background: #f8f9fa;
-  border-radius: 8px;
+  margin-top: 16px;
   
   h3 {
-    margin-top: 0;
-    color: #333;
+    margin: 16px 0;
+    color: var(--mdc-theme-on-surface);
+    font-weight: 500;
   }
 }
 
 .expense-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
+  margin: 8px 0;
   
-  &:last-child {
-    border-bottom: none;
+  .expense-category-icon {
+    border-radius: 50%;
+    color: white !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-}
-
-.expense-category {
-  color: white;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: bold;
-  min-width: 80px;
-  text-align: center;
-}
-
-.expense-description {
-  flex: 1;
-  color: #333;
-}
-
-.expense-amount {
-  font-weight: bold;
-  color: #28a745;
+  
+  .expense-description {
+    flex: 1;
+    color: var(--mdc-theme-on-surface);
+    font-weight: 400;
+  }
+  
+  .expense-amount {
+    font-weight: 600;
+    color: var(--mdc-theme-primary);
+    margin-left: auto;
+  }
 }

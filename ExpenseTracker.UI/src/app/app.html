@@ -1,5 +1,5 @@
 <div class="app-container">
-  <app-currency></app-currency>
+  <!-- Currency selector is now in fab-bar -->
   
   <header class="app-header">
     <h1>{{ title }}</h1>
@@ -7,8 +7,9 @@
   </header>
   
   <main>
-    <app-form></app-form>
-    <app-calendar></app-calendar>
+    <app-statistics [monthDate]="viewedMonth()"></app-statistics>
+    <app-calendar (currentMonthChange)="onMonthChange($event)"></app-calendar>
+    <app-fab-bar></app-fab-bar>
   </main>
 </div>
 
