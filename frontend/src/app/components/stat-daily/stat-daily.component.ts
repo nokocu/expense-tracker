@@ -120,7 +120,7 @@ export class StatDailyComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.expenseService.getCategories().subscribe({
         next: (categories) => {
-          // Update categories with API data
+          // update categories with API data
           this.allCategories = categories.map(cat => ({
             id: cat.id,
             name: cat.name,
@@ -129,7 +129,7 @@ export class StatDailyComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('error loading categories:', error);
-          // Keep default categories as fallback
+          // keep default categories as fallback
         }
       })
     );
@@ -150,7 +150,7 @@ export class StatDailyComponent implements OnInit, OnDestroy {
 
   addExpense(): void {
     this.isAddingExpense = true;
-    // Reset form
+    // reset form
     this.newExpense = {
       description: '',
       categoryId: 1,
@@ -163,7 +163,7 @@ export class StatDailyComponent implements OnInit, OnDestroy {
   }
 
   saveExpense(): void {
-    // Validate form
+    // validate form
     if (!this.newExpense.description?.trim()) {
       console.error('Description is required');
       return;
@@ -179,32 +179,30 @@ export class StatDailyComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Create expense request
+    // create expense request with properly formatted date
     const expenseRequest: CreateExpenseRequest = {
       amount: this.newExpense.amount,
       description: this.newExpense.description.trim(),
       categoryId: this.newExpense.categoryId,
-      date: this.selectedDate
+      date: new Date(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate(), 12, 0, 0) // Set to noon to avoid timezone issues
     };
 
-    console.log('Creating expense:', expenseRequest);
 
-    // Call service to save expense to database
+    // call service to save expense to database
     this.subscription.add(
       this.expenseService.createExpense(expenseRequest).subscribe({
         next: (savedExpense) => {
-          console.log('Expense saved successfully:', savedExpense);
           
-          // Reset form and exit add mode
+          // reset form and exit add mode
           this.isAddingExpense = false;
           
-          // Reload expenses to get fresh data from database
+          // reload expenses to get fresh data from database
           this.loadExpensesForDate(this.selectedDate);
         },
         error: (error) => {
           console.error('Error saving expense:', error);
           
-          // Still exit add mode but show error
+          // still exit add mode but show error
           alert('Failed to save expense. Please try again.');
         }
       })

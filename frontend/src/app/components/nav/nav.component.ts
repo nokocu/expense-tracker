@@ -11,17 +11,14 @@ import { CommonModule } from '@angular/common';
 export class NavComponent {
   
   changeLanguage(): void {
-    // placeholder for future implementation
-    console.log('language change requested');
+    // placeholder
   }
 
   changeCurrency(): void {
-    // placeholder for future implementation
-    console.log('currency change requested');
+    // placeholder
   }
 
   changeTheme(): void {
-    // placeholder for future theme implementation
-    console.log('theme change requested');
+    // placeholder
   }
 }

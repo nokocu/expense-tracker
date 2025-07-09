@@ -18,7 +18,7 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
   totalAmount: number = 0;
   private subscription = new Subscription();
 
-  // All possible categories with colors
+  // all possible categories with colors
   allCategories = [
     { categoryId: 1, categoryName: 'food', categoryColor: '#ff4444' },
     { categoryId: 2, categoryName: 'transport', categoryColor: '#ffff44' },

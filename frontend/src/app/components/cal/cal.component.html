@@ -1,23 +1,24 @@
 <div class="calendar-component">
   <div class="calendar-header">
     <button class="nav-btn" (click)="previousMonth()">&lt;</button>
-    <span class="month-year">{{ currentMonth }} {{ currentYear }}</span>
+    <span class="month-year">{{ currentMonthYear }}</span>
     <button class="nav-btn" (click)="nextMonth()">&gt;</button>
   </div>
   <div class="calendar-grid">
-    <div class="day-header" *ngFor="let day of dayHeaders">{{ day }}</div>
+    <div class="day-header" *ngFor="let day of weekDays">{{ day }}</div>
     <div 
-      *ngFor="let day of calendarDays" 
+      *ngFor="let calendarDay of calendarDays" 
       class="calendar-day"
-      [class.other-month]="!day.isCurrentMonth"
-      [class.selected]="day.isSelected"
-      [class.today]="day.isToday"
-      (click)="selectDate(day.date)"
+      [class.other-month]="!calendarDay.isCurrentMonth"
+      [class.selected]="selectedDate && isSameDate(calendarDay.date, selectedDate)"
+      [class.today]="calendarDay.isToday"
+      [class.has-expenses]="calendarDay.hasExpenses"
+      (click)="selectDay(calendarDay)"
     >
-      <div class="day-number">{{ day.dayNumber }}</div>
-      <div class="day-expenses" *ngIf="day.totalAmount > 0">
-        <div class="expense-bar" [style.background]="getDayColor(day)"></div>
-        <div class="expense-amount">{{ day.totalAmount | number:'1.0-0' }}</div>
+      <div class="day-number">{{ calendarDay.day }}</div>
+      <div class="day-expenses" *ngIf="calendarDay.hasExpenses">
+        <div class="expense-indicator"></div>
+        <div class="expense-amount">{{ getTotalExpensesForDay(calendarDay) | currency:'USD':'symbol':'1.0-0' }}</div>
       </div>
     </div>
   </div>
