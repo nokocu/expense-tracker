@@ -44,25 +44,27 @@
       >
     </div>
     
-    <div class="form-field">
-      <label class="form-label">category</label>
-      <select class="form-select" [(ngModel)]="newExpense.categoryId">
-        <option *ngFor="let category of allCategories" [value]="category.id">
-          {{ category.name }}
-        </option>
-      </select>
-    </div>
-    
-    <div class="form-field">
-      <label class="form-label">amount ({{ currentCurrency }})</label>
-      <input 
-        type="number" 
-        class="form-input" 
-        [(ngModel)]="newExpense.amount"
-        placeholder="0.00"
-        step="0.01"
-        min="0"
-      >
+    <div class="form-row">
+      <div class="form-field form-field-left">
+        <label class="form-label">category</label>
+        <select class="form-select" [(ngModel)]="newExpense.categoryId">
+          <option *ngFor="let category of allCategories" [value]="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="form-field form-field-right">
+        <label class="form-label">amount ({{ currentCurrency }})</label>
+        <input 
+          type="number" 
+          class="form-input" 
+          [(ngModel)]="newExpense.amount"
+          placeholder="0.00"
+          step="0.01"
+          min="0"
+        >
+      </div>
     </div>
   </div>
   

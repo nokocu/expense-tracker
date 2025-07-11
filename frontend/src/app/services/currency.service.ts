@@ -23,7 +23,7 @@ export class CurrencyService {
     const normalizedCurrency = currency.toLowerCase();
     this.currencySubject.next(normalizedCurrency);
     
-    // Persist to localStorage
+    // persist to localStorage
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(this.CURRENCY_STORAGE_KEY, normalizedCurrency);
     }
