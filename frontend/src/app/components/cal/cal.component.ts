@@ -101,7 +101,7 @@ export class CalComponent implements OnInit, OnDestroy {
     const daysInMonth = lastDay.getDate();
     
     // previous month details
-    const prevMonth = new Date(year, month, 0); // This gives us the last day of the previous month
+    const prevMonth = new Date(year, month, 0); // this gives us the last day of the previous month
     const prevMonthDays = prevMonth.getDate();
     
     // add previous month overflow days (calculate correctly for Monday start)
@@ -175,7 +175,7 @@ export class CalComponent implements OnInit, OnDestroy {
     this.selectedDate = calendarDay.date;
     
 
-    this.expenseService.setSelectedDate(calendarDay.date); // Set the date in the service
+    this.expenseService.setSelectedDate(calendarDay.date); // set the date in the service
     this.daySelected.emit(calendarDay.date);
   }
 

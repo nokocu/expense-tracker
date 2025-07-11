@@ -50,7 +50,7 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   onCurrencyFocus(): void {
-    // Clear the input value when focused so user can type new currency
+    // clear the input value when focused so user can type new currency
     this.currencyInputValue = '';
   }
 
@@ -63,7 +63,7 @@ export class NavComponent implements OnInit, OnDestroy {
     if (this.currencyInputValue.trim()) {
       this.currencyService.setCurrency(this.currencyInputValue.trim());
     }
-    // Clear the input value on blur to show placeholder again
+    // clear the input value on blur to show placeholder again
     this.currencyInputValue = '';
   }
 
@@ -72,7 +72,7 @@ export class NavComponent implements OnInit, OnDestroy {
       if (this.currencyInputValue.trim()) {
         this.currencyService.setCurrency(this.currencyInputValue.trim());
       }
-      // Clear the input and remove focus
+      // clear the input and remove focus
       this.currencyInputValue = '';
       (event.target as HTMLInputElement).blur();
     }

@@ -1,14 +1,5 @@
 namespace NoMoney.Api.DTOs
 {
-    public class CategoryDto
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Color { get; set; } = string.Empty;
-        public bool IsDefault { get; set; }
-        public int UserId { get; set; }
-    }
-
     public class MonthlyStatsDto
     {
         public decimal TotalSpent { get; set; }

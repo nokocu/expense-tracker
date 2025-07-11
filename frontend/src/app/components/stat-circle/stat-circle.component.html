@@ -1,4 +1,5 @@
 <div class="component">
+
   <h2 class="stat-title">{{ translate('monthlyStats.title') }}</h2>
   <div class="chart-container">
     <canvas #chartCanvas width="200" height="200" class="chart-canvas"></canvas>
@@ -8,11 +9,66 @@
     </div>
   </div>
   <div class="legend">
-    <div class="legend-item" *ngFor="let category of getDisplayCategories()">
-      <div class="legend-color" [style.background-color]="category.categoryColor"></div>
-      <div class="legend-text">
-        <span class="legend-name">{{ translateCategoryName(category.categoryName) }}</span>
-        <span class="legend-amount">{{ category.totalAmount | number:'1.0-0' }} {{ currentCurrency }}</span>
+    <div class="legend-item" *ngFor="let category of getDisplayCategories()"
+         (mouseenter)="onCategoryHover(category, true)"
+         (mouseleave)="onCategoryHover(category, false)"
+         (mousedown)="startDeleteTimer(category)"
+         (mouseup)="cancelDeleteTimer()"
+         (mouseleave)="cancelDeleteTimer()">
+      
+      <!-- Regular Category -->
+      <div class="category-content">
+        <!-- Color Picker -->
+        <div class="legend-color-container">
+          <input 
+            type="color" 
+            [value]="category.categoryColor"
+            (change)="onCategoryColorChange(category.categoryId, $any($event.target).value)"
+            class="color-picker"
+            [title]="'Change color for ' + category.categoryName"
+            #colorInput>
+          <div 
+            class="legend-color" 
+            [style.background-color]="category.categoryColor"
+            (click)="colorInput.click(); $event.stopPropagation()"
+            (mousedown)="$event.stopPropagation()">
+          </div>
+        </div>
+        
+        <!-- Category Name -->
+        <div class="legend-text">
+          <span class="legend-name">{{ translateCategoryName(category.categoryName) }}</span>
+          <span class="legend-amount">{{ category.totalAmount | number:'1.0-0' }} {{ currentCurrency }}</span>
+        </div>
+        
+        <!-- Delete overlay (exactly like stat-daily) -->
+        <div class="delete-overlay" 
+             *ngIf="canDeleteCategory(category)"
+             [class.visible]="category.categoryId === hoveredCategoryId"
+             [class.deleting]="category.categoryId === deletingCategoryId">
+          <div class="delete-text">{{ translate('common.delete') }}</div>
+          <div class="delete-progress" 
+               [style.width.%]="category.categoryId === deletingCategoryId ? deleteProgress : 0"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Add New Category Input (always at bottom) -->
+    <div class="legend-item add-new-item">
+      <div class="add-new-category">
+        <div class="legend-color-container">
+          <div class="legend-color add-new-color">+</div>
+        </div>
+        <div class="legend-text">
+          <input 
+            type="text" 
+            class="add-category-input"
+            [(ngModel)]="newCategoryName"
+            (keyup.enter)="onCreateNewCategory()"
+            (blur)="onCreateNewCategory()"
+            [placeholder]="translate('categories.addNewCategory')"
+            maxlength="50">
+        </div>
       </div>
     </div>
   </div>

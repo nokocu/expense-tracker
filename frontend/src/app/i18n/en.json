@@ -37,6 +37,7 @@
     "title": "calendar"
   },
   "categories": {
+    "addNewCategory": "add new category",
     "food": "food",
     "transport": "transport",
     "entertainment": "entertainment",

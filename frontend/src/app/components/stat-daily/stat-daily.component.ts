@@ -5,7 +5,8 @@ import { Subscription } from 'rxjs';
 import { ExpenseService } from '../../services/expense.service';
 import { CurrencyService } from '../../services/currency.service';
 import { TranslationService } from '../../services/translation.service';
-import { Expense, CreateExpenseRequest } from '../../models/expense.model';
+import { CategoryService } from '../../services/category.service';
+import { Expense, CreateExpenseRequest, Category } from '../../models/expense.model';
 
 @Component({
   selector: 'app-stat-daily',
@@ -18,6 +19,7 @@ export class StatDailyComponent implements OnInit, OnDestroy {
   expenses: Expense[] = [];
   selectedDate: Date = new Date();
   currentCurrency: string = 'pln';
+  allCategories: Category[] = [];
   private subscription = new Subscription();
   
   // add expense mode
@@ -35,29 +37,11 @@ export class StatDailyComponent implements OnInit, OnDestroy {
   private deleteTimer: any = null;
   private deleteInterval: any = null;
 
-  private categoryColors: { [key: string]: string } = {
-    'food': '#ff4444',
-    'entertainment': '#44ff44',
-    'transport': '#ffff44',
-    'healthcare': '#4444ff',
-    'rent': '#ff44ff',
-    'shopping': '#ff8844'
-  };
-
-  // all possible categories - will be loaded from API
-  allCategories: { id: number; name: string; color: string }[] = [
-    { id: 1, name: 'food', color: '#ff4444' },
-    { id: 2, name: 'transport', color: '#ffff44' },
-    { id: 3, name: 'entertainment', color: '#44ff44' },
-    { id: 4, name: 'healthcare', color: '#4444ff' },
-    { id: 5, name: 'shopping', color: '#ff8844' },
-    { id: 6, name: 'rent', color: '#ff44ff' }
-  ];
-
   constructor(
     private expenseService: ExpenseService,
     private currencyService: CurrencyService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {
@@ -139,25 +123,27 @@ export class StatDailyComponent implements OnInit, OnDestroy {
 
   private loadCategories(): void {
     this.subscription.add(
-      this.expenseService.getCategories().subscribe({
-        next: (categories) => {
-          // update categories with API data
-          this.allCategories = categories.map(cat => ({
-            id: cat.id,
-            name: cat.name,
-            color: cat.color
-          }));
+      this.categoryService.getCategories().subscribe({
+        next: (categories: Category[]) => {
+          this.allCategories = categories;
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('error loading categories:', error);
-          // keep default categories as fallback
         }
+      })
+    );
+
+    // subscribe to category changes
+    this.subscription.add(
+      this.categoryService.categories$.subscribe((categories: Category[]) => {
+        this.allCategories = categories;
       })
     );
   }
 
   getCategoryColor(categoryName: string): string {
-    return this.categoryColors[categoryName.toLowerCase()] || '#ffffff';
+    const category = this.allCategories.find(cat => cat.name.toLowerCase() === categoryName.toLowerCase());
+    return category?.color || '#ffffff';
   }
 
   getDailyTotal(): number {
@@ -233,24 +219,24 @@ export class StatDailyComponent implements OnInit, OnDestroy {
     );
   }
 
-  // Delete functionality methods
+  // delete functionality methods
   onExpenseHover(expense: Expense, isHovering: boolean): void {
     this.hoveredExpenseId = isHovering ? expense.id : null;
   }
 
   startDeleteTimer(expense: Expense): void {
-    if (this.isAddingExpense) return; // Don't allow delete while adding expense
+    if (this.isAddingExpense) return; // dont allow delete while adding expense
     
     this.deletingExpenseId = expense.id;
     this.deleteProgress = 0;
     
-    // Start progress animation
+    // start progress animation
     this.deleteInterval = setInterval(() => {
       this.deleteProgress += 2; // 50 updates over 1 second (100% / 50 = 2%)
       if (this.deleteProgress >= 100) {
         this.deleteExpense(expense);
       }
-    }, 20); // Update every 20ms for smooth animation
+    }, 20); // update every 20ms for smooth animation
   }
 
   cancelDeleteTimer(): void {
@@ -268,7 +254,7 @@ export class StatDailyComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.expenseService.deleteExpense(expense.id).subscribe({
         next: () => {
-          // Remove expense from local array
+          // remove expense from local array
           this.expenses = this.expenses.filter(e => e.id !== expense.id);
           console.log('Expense deleted successfully');
           
@@ -306,6 +292,6 @@ export class StatDailyComponent implements OnInit, OnDestroy {
   }
 
   changeTheme(): void {
-    // Theme changing logic here
+    // theme changing logic here
   }
 }
