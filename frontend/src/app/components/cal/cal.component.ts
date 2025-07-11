@@ -34,7 +34,7 @@ export class CalComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
   
   get weekDays(): string[] {
-    return ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+    return ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
       .map(day => this.translationService.translate(`days.${day}`));
   }
   months = [
@@ -104,9 +104,11 @@ export class CalComponent implements OnInit, OnDestroy {
     const prevMonth = new Date(year, month, 0); // This gives us the last day of the previous month
     const prevMonthDays = prevMonth.getDate();
     
-    // add previous month overflow days (calculate correctly)
+    // add previous month overflow days (calculate correctly for Monday start)
     // we want to show previous month days leading up to the 1st of current month
-    const daysFromPrevMonth = firstDayWeekday;
+    // adjust for Monday start: Sunday becomes 6, Monday becomes 0
+    const adjustedFirstDayWeekday = (firstDayWeekday + 6) % 7;
+    const daysFromPrevMonth = adjustedFirstDayWeekday;
     
     
     for (let i = daysFromPrevMonth - 1; i >= 0; i--) {
