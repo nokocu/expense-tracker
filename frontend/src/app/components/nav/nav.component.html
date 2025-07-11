@@ -10,9 +10,16 @@
       <button class="nav-button" (click)="changeLanguage()">
         language: en
       </button>
-      <button class="nav-button secondary" (click)="changeCurrency()">
-        currency: pln
-      </button>
+      <input 
+        type="text" 
+        class="nav-button secondary currency-input-button"
+        [(ngModel)]="currencyInputValue"
+        [placeholder]="'currency: ' + currentCurrency"
+        (input)="onCurrencyInput($event)"
+        (blur)="onCurrencyBlur()"
+        (keypress)="onCurrencyKeyPress($event)"
+        (focus)="onCurrencyFocus()"
+        maxlength="10">
     </div>
   </div>
 </nav>

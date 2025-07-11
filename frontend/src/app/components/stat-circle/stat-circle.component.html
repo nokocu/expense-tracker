@@ -4,7 +4,7 @@
     <canvas #chartCanvas width="200" height="200" class="chart-canvas"></canvas>
     <div class="chart-center">
       <div class="center-amount">{{ totalAmount | number:'1.0-0' }}</div>
-      <div class="center-label">pln</div>
+      <div class="center-label">{{ currentCurrency }}</div>
     </div>
   </div>
   <div class="legend">
@@ -12,7 +12,7 @@
       <div class="legend-color" [style.background-color]="category.categoryColor"></div>
       <div class="legend-text">
         <span class="legend-name">{{ category.categoryName }}</span>
-        <span class="legend-amount">{{ category.totalAmount | number:'1.0-0' }} pln</span>
+        <span class="legend-amount">{{ category.totalAmount | number:'1.0-0' }} {{ currentCurrency }}</span>
       </div>
     </div>
   </div>

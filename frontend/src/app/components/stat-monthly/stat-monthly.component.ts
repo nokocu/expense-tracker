@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ExpenseService } from '../../services/expense.service';
+import { CurrencyService } from '../../services/currency.service';
 import { MonthlyStats } from '../../models/expense.model';
 
 @Component({
@@ -15,9 +16,13 @@ export class StatMonthlyComponent implements OnInit, OnDestroy {
   monthlyStats: MonthlyStats | null = null;
   currentMonth: string = '';
   currentYear: number = 0;
+  currentCurrency: string = 'pln';
   private subscription = new Subscription();
 
-  constructor(private expenseService: ExpenseService) {}
+  constructor(
+    private expenseService: ExpenseService,
+    private currencyService: CurrencyService
+  ) {}
 
   ngOnInit(): void {
     this.loadCurrentMonthData();
@@ -27,6 +32,13 @@ export class StatMonthlyComponent implements OnInit, OnDestroy {
       this.expenseService.selectedDate$.subscribe(date => {
         this.updateMonthDisplay(date);
         this.loadMonthlyStats(date.getFullYear(), date.getMonth() + 1);
+      })
+    );
+
+    // subscribe to currency changes
+    this.subscription.add(
+      this.currencyService.currency$.subscribe(currency => {
+        this.currentCurrency = currency;
       })
     );
   }

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } fr
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ExpenseService } from '../../services/expense.service';
+import { CurrencyService } from '../../services/currency.service';
 import { CategoryExpense, Category } from '../../models/expense.model';
 
 @Component({
@@ -17,9 +18,13 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
   categories: CategoryExpense[] = [];
   allCategories: Category[] = []; 
   totalAmount: number = 0;
+  currentCurrency: string = 'pln';
   private subscription = new Subscription();
 
-  constructor(private expenseService: ExpenseService) {}
+  constructor(
+    private expenseService: ExpenseService,
+    private currencyService: CurrencyService
+  ) {}
 
   ngOnInit(): void {
     this.loadAllCategories();
@@ -29,6 +34,13 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscription.add(
       this.expenseService.selectedDate$.subscribe(date => {
         this.loadMonthlyStats(date.getFullYear(), date.getMonth() + 1);
+      })
+    );
+
+    // subscribe to currency changes
+    this.subscription.add(
+      this.currencyService.currency$.subscribe(currency => {
+        this.currentCurrency = currency;
       })
     );
   }

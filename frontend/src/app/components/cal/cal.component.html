@@ -17,8 +17,15 @@
     >
       <div class="day-number">{{ calendarDay.day }}</div>
       <div class="day-expenses" *ngIf="calendarDay.hasExpenses">
-        <div class="expense-indicator"></div>
-        <div class="expense-amount">{{ getTotalExpensesForDay(calendarDay) | currency:'USD':'symbol':'1.0-0' }}</div>
+        <div class="expense-total">{{ getTotalExpensesForDay(calendarDay) | number:'1.0-0' }} {{ currentCurrency }}</div>
+        <div class="category-bars">
+          <div 
+            *ngFor="let category of getCategoryBreakdownForDay(calendarDay)" 
+            class="category-bar"
+            [style.background-color]="category.color"
+            [title]="category.categoryName + ': ' + (category.amount | number:'1.0-0') + ' ' + currentCurrency"
+          ></div>
+        </div>
       </div>
     </div>
   </div>

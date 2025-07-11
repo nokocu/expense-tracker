@@ -19,7 +19,7 @@
         </div>
         <div class="expense-description">{{ expense.description }}</div>
       </div>
-      <div class="expense-amount">{{ expense.amount | number:'1.2-2' }} pln</div>
+      <div class="expense-amount">{{ expense.amount | number:'1.2-2' }} {{ currentCurrency }}</div>
       
       <!-- Delete overlay -->
       <div class="delete-overlay" 
@@ -54,7 +54,7 @@
     </div>
     
     <div class="form-field">
-      <label class="form-label">amount (pln)</label>
+      <label class="form-label">amount ({{ currentCurrency }})</label>
       <input 
         type="number" 
         class="form-input" 
@@ -68,7 +68,7 @@
   
   <div *ngIf="!isAddingExpense && expenses.length > 0" class="daily-total">
     <div class="total-label">total for day:</div>
-    <div class="total-amount">{{ getDailyTotal() | number:'1.2-2' }} pln</div>
+    <div class="total-amount">{{ getDailyTotal() | number:'1.2-2' }} {{ currentCurrency }}</div>
   </div>
   
   <!-- Buttons -->

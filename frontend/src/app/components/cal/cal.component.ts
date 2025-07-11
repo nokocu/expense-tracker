@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ExpenseService } from '../../services/expense.service';
+import { CurrencyService } from '../../services/currency.service';
 import { Expense } from '../../models/expense.model';
 
 interface CalendarDay {
@@ -28,6 +29,7 @@ export class CalComponent implements OnInit, OnDestroy {
   selectedDate: Date | null = null;
   calendarDays: CalendarDay[] = [];
   expenses: Expense[] = [];
+  currentCurrency: string = 'pln';
   private subscription = new Subscription();
   
   weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -36,7 +38,10 @@ export class CalComponent implements OnInit, OnDestroy {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  constructor(private expenseService: ExpenseService) {}
+  constructor(
+    private expenseService: ExpenseService,
+    private currencyService: CurrencyService
+  ) {}
 
   ngOnInit() {
     // subscribe to selected date changes from the service
@@ -44,6 +49,13 @@ export class CalComponent implements OnInit, OnDestroy {
       this.expenseService.selectedDate$.subscribe(date => {
         this.selectedDate = date;
         this.loadExpenses();
+      })
+    );
+
+    // subscribe to currency changes
+    this.subscription.add(
+      this.currencyService.currency$.subscribe(currency => {
+        this.currentCurrency = currency;
       })
     );
   }
@@ -176,5 +188,41 @@ export class CalComponent implements OnInit, OnDestroy {
 
   getTotalExpensesForDay(calendarDay: CalendarDay): number {
     return calendarDay.expenses.reduce((total, expense) => total + expense.amount, 0);
+  }
+
+  getCategoryBreakdownForDay(calendarDay: CalendarDay): { categoryName: string; amount: number; color: string }[] {
+    const categoryMap = new Map<string, { amount: number; color: string }>();
+    
+    calendarDay.expenses.forEach(expense => {
+      const categoryName = expense.categoryName.toLowerCase();
+      const existing = categoryMap.get(categoryName);
+      
+      if (existing) {
+        existing.amount += expense.amount;
+      } else {
+        categoryMap.set(categoryName, {
+          amount: expense.amount,
+          color: this.getCategoryColor(categoryName)
+        });
+      }
+    });
+    
+    return Array.from(categoryMap.entries()).map(([categoryName, data]) => ({
+      categoryName,
+      amount: data.amount,
+      color: data.color
+    }));
+  }
+
+  private getCategoryColor(categoryName: string): string {
+    const colors: { [key: string]: string } = {
+      'food': '#ff4444',
+      'transport': '#ffff44',
+      'entertainment': '#44ff44',
+      'healthcare': '#4444ff',
+      'shopping': '#ff8844',
+      'rent': '#ff44ff'
+    };
+    return colors[categoryName] || '#888888';
   }
 }

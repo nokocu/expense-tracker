@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ExpenseService } from '../../services/expense.service';
+import { CurrencyService } from '../../services/currency.service';
 import { Expense, CreateExpenseRequest } from '../../models/expense.model';
 
 @Component({
@@ -15,6 +16,7 @@ import { Expense, CreateExpenseRequest } from '../../models/expense.model';
 export class StatDailyComponent implements OnInit, OnDestroy {
   expenses: Expense[] = [];
   selectedDate: Date = new Date();
+  currentCurrency: string = 'pln';
   private subscription = new Subscription();
   
   // add expense mode
@@ -51,7 +53,10 @@ export class StatDailyComponent implements OnInit, OnDestroy {
     { id: 6, name: 'rent', color: '#ff44ff' }
   ];
 
-  constructor(private expenseService: ExpenseService) {}
+  constructor(
+    private expenseService: ExpenseService,
+    private currencyService: CurrencyService
+  ) {}
 
   ngOnInit(): void {
     this.loadCurrentDayData();
@@ -62,6 +67,13 @@ export class StatDailyComponent implements OnInit, OnDestroy {
       this.expenseService.selectedDate$.subscribe(date => {
         this.selectedDate = date;
         this.loadExpensesForDate(date);
+      })
+    );
+
+    // subscribe to currency changes
+    this.subscription.add(
+      this.currencyService.currency$.subscribe(currency => {
+        this.currentCurrency = currency;
       })
     );
   }

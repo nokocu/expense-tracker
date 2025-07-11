@@ -33,6 +33,7 @@
   font-family: 'Geist Mono', monospace;
   font-size: 12px;
   transition: all 0.2s;
+  width: 140px;
 }
 
 .nav-button.secondary {
@@ -40,6 +41,7 @@
   border: 1px solid #ad46ff;
   color: #ad46ff;
 }
+
 
 .nav-button.theme-button {
   background-color: #1e2939;
@@ -61,6 +63,35 @@
   background-color: #2a3a4d;
   border-color: #2a3a4d;
 }
+
+.currency-input-button {
+  background-color: #351759;
+  border: 1px solid #ad46ff;
+  color: #ad46ff;
+  outline: none;
+}
+
+.currency-input-button:focus {
+  background-color: #ad46ff;
+  color: #ffffff ;
+  cursor: text ;
+  text-align: center;
+}
+
+.currency-input-button::placeholder {
+  color: #ad46ff ;
+  opacity: 1 ;
+  text-align: center ;
+}
+
+.currency-input-button:hover::placeholder {
+  color:white;
+}
+
+.currency-input-button:focus::placeholder {
+  color: rgba(255, 255, 255, 0.7) ;
+}
+
 
 @media (max-width: 768px) {
   .nav-content {

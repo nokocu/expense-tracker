@@ -3,11 +3,11 @@
   <div class="stats-grid">
     <div class="stat-item">
       <div class="stat-label">total spent</div>
-      <div class="stat-value">{{ monthlyStats?.totalSpent | number:'1.2-2' }} pln</div>
+      <div class="stat-value">{{ monthlyStats?.totalSpent | number:'1.2-2' }} {{ currentCurrency }}</div>
     </div>
     <div class="stat-item">
       <div class="stat-label">daily average</div>
-      <div class="stat-value">{{ monthlyStats?.dailyAverage | number:'1.2-2' }} pln</div>
+      <div class="stat-value">{{ monthlyStats?.dailyAverage | number:'1.2-2' }} {{ currentCurrency }}</div>
     </div>
   </div>
   <div class="month-info">
