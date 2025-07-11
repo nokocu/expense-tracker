@@ -23,14 +23,7 @@ obj/
 *.pdb
 packages/
 
-# Database files
-*.db
-*.db-shm
-*.db-wal
-*.sqlite
-*.sqlite3
-*.mdf
-*.ldf
+
 
 # IDE and Editor files
 .vs/
