@@ -132,7 +132,7 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const outerRadius = 80;
-    const innerRadius = 45;
+    const innerRadius = 60;
 
     // clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -152,19 +152,40 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     let currentAngle = -Math.PI / 2;
+    const gapAngle = 0.06; // larger gap between segments
+    const hasMultipleCategories = this.categories.length > 1;
 
-    this.categories.forEach(category => {
+    this.categories.forEach((category, index) => {
       const sliceAngle = (category.percentage / 100) * 2 * Math.PI;
       
-      // draw slice
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, outerRadius, currentAngle, currentAngle + sliceAngle);
-      ctx.arc(centerX, centerY, innerRadius, currentAngle + sliceAngle, currentAngle, true);
-      ctx.closePath();
-      ctx.fillStyle = category.categoryColor;
-      ctx.fill();
+      let adjustedSliceAngle = sliceAngle;
+      
+      // only add gaps if there are multiple categories
+      if (hasMultipleCategories) {
+        // add gap before each slice
+        currentAngle += gapAngle / 2;
+        
+        // reduce slice angle to account for gaps on both sides
+        adjustedSliceAngle = sliceAngle - gapAngle;
+      }
+      
+      // only draw if the adjusted slice is large enough to be visible
+      if (adjustedSliceAngle > 0) {
+        // draw slice
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, outerRadius, currentAngle, currentAngle + adjustedSliceAngle);
+        ctx.arc(centerX, centerY, innerRadius, currentAngle + adjustedSliceAngle, currentAngle, true);
+        ctx.closePath();
+        ctx.fillStyle = category.categoryColor;
+        ctx.fill();
+      }
 
-      currentAngle += sliceAngle;
+      currentAngle += adjustedSliceAngle;
+      
+      // only add gap after if there are multiple categories
+      if (hasMultipleCategories) {
+        currentAngle += gapAngle / 2;
+      }
     });
   }
 
