@@ -1,0 +1,78 @@
+{
+  "nav": {
+    "appTitle": "nomoney",
+    "theme": "motyw",
+    "language": "język",
+    "currency": "waluta"
+  },
+  "themes": {
+    "dark": "ciemny",
+    "light": "jasny"
+  },
+  "common": {
+    "add": "dodaj",
+    "back": "powrót",
+    "delete": "usuń",
+    "save": "zapisz",
+    "cancel": "anuluj"
+  },
+  "dailyExpenses": {
+    "title": "wydatki na dzień",
+    "addExpense": "dodaj wydatek",
+    "noExpenses": "brak wydatków tego dnia",
+    "totalForDay": "suma za dzień",
+    "addExpenseButton": "+ dodaj",
+    "description": "opis",
+    "category": "kategoria",
+    "amount": "kwota",
+    "descriptionPlaceholder": "wpisz opis",
+    "amountPlaceholder": "0,00"
+  },
+  "monthlyStats": {
+    "title": "zestawienie miesięczne",
+    "totalSpent": "łącznie wydano",
+    "dailyAverage": "średnia dzienna"
+  },
+  "calendar": {
+    "title": "kalendarz"
+  },
+  "categories": {
+    "food": "jedzenie",
+    "transport": "transport",
+    "entertainment": "rozrywka",
+    "shopping": "zakupy",
+    "healthcare": "zdrowie",
+    "rent": "rachunki",
+    "other": "inne"
+  },
+  "months": {
+    "january": "styczeń",
+    "february": "luty",
+    "march": "marzec",
+    "april": "kwiecień",
+    "may": "maj",
+    "june": "czerwiec",
+    "july": "lipiec",
+    "august": "sierpień",
+    "september": "wrzesień",
+    "october": "październik",
+    "november": "listopad",
+    "december": "grudzień"
+  },
+  "days": {
+    "monday": "poniedziałek",
+    "tuesday": "wtorek",
+    "wednesday": "środa",
+    "thursday": "czwartek",
+    "friday": "piątek",
+    "saturday": "sobota",
+    "sunday": "niedziela",
+    "mon": "pon",
+    "tue": "wt",
+    "wed": "śr",
+    "thu": "czw",
+    "fri": "pt",
+    "sat": "sob",
+    "sun": "nd"
+  }
+}

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CurrencyService } from '../../services/currency.service';
+import { TranslationService, Language } from '../../services/translation.service';
 
 @Component({
   selector: 'app-nav',
@@ -14,14 +15,24 @@ import { CurrencyService } from '../../services/currency.service';
 export class NavComponent implements OnInit, OnDestroy {
   currentCurrency: string = 'pln';
   currencyInputValue: string = '';
+  currentLanguage: Language = 'en';
   private subscription = new Subscription();
 
-  constructor(private currencyService: CurrencyService) {}
+  constructor(
+    private currencyService: CurrencyService,
+    private translationService: TranslationService
+  ) {}
 
   ngOnInit(): void {
     this.subscription.add(
       this.currencyService.currency$.subscribe(currency => {
         this.currentCurrency = currency;
+      })
+    );
+
+    this.subscription.add(
+      this.translationService.language$.subscribe((language: Language) => {
+        this.currentLanguage = language;
       })
     );
   }
@@ -31,7 +42,11 @@ export class NavComponent implements OnInit, OnDestroy {
   }
   
   changeLanguage(): void {
-    // placeholder
+    this.translationService.toggleLanguage();
+  }
+
+  translate(key: string): string {
+    return this.translationService.translate(key);
   }
 
   onCurrencyFocus(): void {

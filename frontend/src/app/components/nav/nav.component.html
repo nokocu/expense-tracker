@@ -1,20 +1,20 @@
 <nav class="navbar">
   <div class="nav-content">
     <div class="nav-left">
-      <h1 class="app-title">nomoney v1</h1>
+      <h1 class="app-title">{{ translate('nav.appTitle') }}</h1>
     </div>
     <div class="nav-right">
       <button class="nav-button theme-button" (click)="changeTheme()">
-        theme: dark
+        {{ translate('nav.theme') }}: {{ translate('themes.dark') }}
       </button>
       <button class="nav-button" (click)="changeLanguage()">
-        language: en
+        {{ translate('nav.language') }}: {{ currentLanguage }}
       </button>
       <input 
         type="text" 
         class="nav-button secondary currency-input-button"
         [(ngModel)]="currencyInputValue"
-        [placeholder]="'currency: ' + currentCurrency"
+        [placeholder]="translate('nav.currency') + ': ' + currentCurrency"
         (input)="onCurrencyInput($event)"
         (blur)="onCurrencyBlur()"
         (keypress)="onCurrencyKeyPress($event)"

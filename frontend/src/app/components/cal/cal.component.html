@@ -23,7 +23,7 @@
             *ngFor="let category of getCategoryBreakdownForDay(calendarDay)" 
             class="category-bar"
             [style.background-color]="category.color"
-            [title]="category.categoryName + ': ' + (category.amount | number:'1.0-0') + ' ' + currentCurrency"
+            [title]="translateCategoryName(category.categoryName) + ': ' + (category.amount | number:'1.0-0') + ' ' + currentCurrency"
           ></div>
         </div>
       </div>

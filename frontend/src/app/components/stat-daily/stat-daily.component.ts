@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ExpenseService } from '../../services/expense.service';
 import { CurrencyService } from '../../services/currency.service';
+import { TranslationService } from '../../services/translation.service';
 import { Expense, CreateExpenseRequest } from '../../models/expense.model';
 
 @Component({
@@ -55,7 +56,8 @@ export class StatDailyComponent implements OnInit, OnDestroy {
 
   constructor(
     private expenseService: ExpenseService,
-    private currencyService: CurrencyService
+    private currencyService: CurrencyService,
+    private translationService: TranslationService
   ) {}
 
   ngOnInit(): void {
@@ -279,5 +281,31 @@ export class StatDailyComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  translate(key: string): string {
+    return this.translationService.translate(key);
+  }
+
+  translateCategoryName(categoryName: string): string {
+    const categoryKey = `categories.${categoryName.toLowerCase()}`;
+    return this.translationService.translate(categoryKey);
+  }
+
+  formatDate(date: Date): string {
+    const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 
+                       'july', 'august', 'september', 'october', 'november', 'december'];
+    
+    const dayName = this.translate(`days.${dayNames[date.getDay()]}`);
+    const monthName = this.translate(`months.${monthNames[date.getMonth()]}`);
+    const day = date.getDate();
+    const year = date.getFullYear();
+    
+    return `${dayName}, ${day} ${monthName} ${year}`;
+  }
+
+  changeTheme(): void {
+    // Theme changing logic here
   }
 }

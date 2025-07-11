@@ -1,11 +1,11 @@
 <div class="component">
-  <h2 class="stat-title">{{ isAddingExpense ? 'add an expense' : 'daily expenses' }}</h2>
-  <div class="date-display">{{ selectedDate | date:'fullDate' }}</div>
+  <h2 class="stat-title">{{ isAddingExpense ? translate('dailyExpenses.addExpense') : translate('dailyExpenses.title') }}</h2>
+  <div class="date-display">{{ formatDate(selectedDate) }}</div>
   
   <!-- Normal expenses view -->
   <div *ngIf="!isAddingExpense" class="expenses-container scrollable">
     <div *ngIf="expenses.length === 0" class="no-expenses">
-      no expenses for this day
+      {{ translate('dailyExpenses.noExpenses') }}
     </div>
     <div *ngFor="let expense of expenses" class="expense-item" 
          (mouseenter)="onExpenseHover(expense, true)"
@@ -15,7 +15,7 @@
          (mouseleave)="cancelDeleteTimer()">
       <div class="expense-info">
         <div class="expense-category" [style.color]="getCategoryColor(expense.categoryName)">
-          {{ expense.categoryName }}
+          {{ translateCategoryName(expense.categoryName) }}
         </div>
         <div class="expense-description">{{ expense.description }}</div>
       </div>
@@ -25,7 +25,7 @@
       <div class="delete-overlay" 
            [class.visible]="expense.id === hoveredExpenseId"
            [class.deleting]="expense.id === deletingExpenseId">
-        <div class="delete-text">delete</div>
+        <div class="delete-text">{{ translate('common.delete') }}</div>
         <div class="delete-progress" 
              [style.width.%]="expense.id === deletingExpenseId ? deleteProgress : 0"></div>
       </div>
@@ -35,32 +35,32 @@
   <!-- Add expense form -->
   <div *ngIf="isAddingExpense" class="add-form-container">
     <div class="form-field">
-      <label class="form-label">description</label>
+      <label class="form-label">{{ translate('dailyExpenses.description') }}</label>
       <input 
         type="text" 
         class="form-input" 
         [(ngModel)]="newExpense.description"
-        placeholder="enter expense description"
+        [placeholder]="translate('dailyExpenses.descriptionPlaceholder')"
       >
     </div>
     
     <div class="form-row">
       <div class="form-field form-field-left">
-        <label class="form-label">category</label>
+        <label class="form-label">{{ translate('dailyExpenses.category') }}</label>
         <select class="form-select" [(ngModel)]="newExpense.categoryId">
           <option *ngFor="let category of allCategories" [value]="category.id">
-            {{ category.name }}
+            {{ translateCategoryName(category.name) }}
           </option>
         </select>
       </div>
       
       <div class="form-field form-field-right">
-        <label class="form-label">amount ({{ currentCurrency }})</label>
+        <label class="form-label">{{ translate('dailyExpenses.amount') }} ({{ currentCurrency }})</label>
         <input 
           type="number" 
           class="form-input" 
           [(ngModel)]="newExpense.amount"
-          placeholder="0.00"
+          [placeholder]="translate('dailyExpenses.amountPlaceholder')"
           step="0.01"
           min="0"
         >
@@ -69,22 +69,22 @@
   </div>
   
   <div *ngIf="!isAddingExpense && expenses.length > 0" class="daily-total">
-    <div class="total-label">total for day:</div>
+    <div class="total-label">{{ translate('dailyExpenses.totalForDay') }}:</div>
     <div class="total-amount">{{ getDailyTotal() | number:'1.2-2' }} {{ currentCurrency }}</div>
   </div>
   
   <!-- Buttons -->
   <div class="button-section">
     <button *ngIf="!isAddingExpense" class="add-expense-btn" (click)="addExpense()">
-      + add expense
+      {{ translate('dailyExpenses.addExpenseButton') }}
     </button>
     
     <div *ngIf="isAddingExpense" class="button-row">
       <button class="back-btn" (click)="cancelAddExpense()">
-        ← back
+        ← {{ translate('common.back') }}
       </button>
       <button class="save-btn" (click)="saveExpense()">
-        add
+        {{ translate('common.add') }}
       </button>
     </div>
   </div>

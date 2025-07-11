@@ -1,0 +1,78 @@
+{
+  "nav": {
+    "appTitle": "nomoney",
+    "theme": "theme",
+    "language": "language",
+    "currency": "currency"
+  },
+  "themes": {
+    "dark": "dark",
+    "light": "light"
+  },
+  "common": {
+    "add": "add",
+    "back": "back",
+    "delete": "delete",
+    "save": "save",
+    "cancel": "cancel"
+  },
+  "dailyExpenses": {
+    "title": "daily expenses",
+    "addExpense": "add an expense",
+    "noExpenses": "no expenses for this day",
+    "totalForDay": "total for day",
+    "addExpenseButton": "+ add expense",
+    "description": "description",
+    "category": "category",
+    "amount": "amount",
+    "descriptionPlaceholder": "enter expense description",
+    "amountPlaceholder": "0.00"
+  },
+  "monthlyStats": {
+    "title": "monthly breakdown",
+    "totalSpent": "total spent",
+    "dailyAverage": "daily average"
+  },
+  "calendar": {
+    "title": "calendar"
+  },
+  "categories": {
+    "food": "food",
+    "transport": "transport",
+    "entertainment": "entertainment",
+    "shopping": "shopping",
+    "healthcare": "healthcare",
+    "rent": "utilities",
+    "other": "other"
+  },
+  "months": {
+    "january": "january",
+    "february": "february",
+    "march": "march",
+    "april": "april",
+    "may": "may",
+    "june": "june",
+    "july": "july",
+    "august": "august",
+    "september": "september",
+    "october": "october",
+    "november": "november",
+    "december": "december"
+  },
+  "days": {
+    "monday": "monday",
+    "tuesday": "tuesday",
+    "wednesday": "wednesday",
+    "thursday": "thursday",
+    "friday": "friday",
+    "saturday": "saturday",
+    "sunday": "sunday",
+    "mon": "mon",
+    "tue": "tue",
+    "wed": "wed",
+    "thu": "thu",
+    "fri": "fri",
+    "sat": "sat",
+    "sun": "sun"
+  }
+}

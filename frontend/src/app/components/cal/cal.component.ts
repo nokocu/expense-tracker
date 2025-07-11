@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ExpenseService } from '../../services/expense.service';
 import { CurrencyService } from '../../services/currency.service';
+import { TranslationService } from '../../services/translation.service';
 import { Expense } from '../../models/expense.model';
 
 interface CalendarDay {
@@ -32,7 +33,10 @@ export class CalComponent implements OnInit, OnDestroy {
   currentCurrency: string = 'pln';
   private subscription = new Subscription();
   
-  weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  get weekDays(): string[] {
+    return ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+      .map(day => this.translationService.translate(`days.${day}`));
+  }
   months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
@@ -40,7 +44,8 @@ export class CalComponent implements OnInit, OnDestroy {
 
   constructor(
     private expenseService: ExpenseService,
-    private currencyService: CurrencyService
+    private currencyService: CurrencyService,
+    private translationService: TranslationService
   ) {}
 
   ngOnInit() {
@@ -183,7 +188,11 @@ export class CalComponent implements OnInit, OnDestroy {
   }
 
   get currentMonthYear(): string {
-    return `${this.months[this.currentDate.getMonth()]} ${this.currentDate.getFullYear()}`;
+    const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 
+                       'july', 'august', 'september', 'october', 'november', 'december'];
+    const monthKey = monthNames[this.currentDate.getMonth()];
+    const translatedMonth = this.translationService.translate(`months.${monthKey}`);
+    return `${translatedMonth} ${this.currentDate.getFullYear()}`;
   }
 
   getTotalExpensesForDay(calendarDay: CalendarDay): number {
@@ -224,5 +233,18 @@ export class CalComponent implements OnInit, OnDestroy {
       'rent': '#ff44ff'
     };
     return colors[categoryName] || '#888888';
+  }
+
+  translate(key: string): string {
+    return this.translationService.translate(key);
+  }
+
+  translateCategoryName(categoryName: string): string {
+    const categoryKey = `categories.${categoryName.toLowerCase()}`;
+    return this.translationService.translate(categoryKey);
+  }
+
+  getDailyTotal(expenses: Expense[]): number {
+    return expenses.reduce((total, expense) => total + expense.amount, 0);
   }
 }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ExpenseService } from '../../services/expense.service';
 import { CurrencyService } from '../../services/currency.service';
+import { TranslationService } from '../../services/translation.service';
 import { CategoryExpense, Category } from '../../models/expense.model';
 
 @Component({
@@ -23,7 +24,8 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private expenseService: ExpenseService,
-    private currencyService: CurrencyService
+    private currencyService: CurrencyService,
+    private translationService: TranslationService
   ) {}
 
   ngOnInit(): void {
@@ -135,6 +137,15 @@ export class StatCircleComponent implements OnInit, OnDestroy, AfterViewInit {
 
       currentAngle += sliceAngle;
     });
+  }
+
+  translate(key: string): string {
+    return this.translationService.translate(key);
+  }
+
+  translateCategoryName(categoryName: string): string {
+    const categoryKey = `categories.${categoryName.toLowerCase()}`;
+    return this.translationService.translate(categoryKey);
   }
 
   getDisplayCategories(): CategoryExpense[] {

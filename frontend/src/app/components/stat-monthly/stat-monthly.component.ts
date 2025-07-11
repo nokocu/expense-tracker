@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ExpenseService } from '../../services/expense.service';
 import { CurrencyService } from '../../services/currency.service';
+import { TranslationService } from '../../services/translation.service';
 import { MonthlyStats } from '../../models/expense.model';
 
 @Component({
@@ -21,7 +22,8 @@ export class StatMonthlyComponent implements OnInit, OnDestroy {
 
   constructor(
     private expenseService: ExpenseService,
-    private currencyService: CurrencyService
+    private currencyService: CurrencyService,
+    private translationService: TranslationService
   ) {}
 
   ngOnInit(): void {
@@ -45,6 +47,18 @@ export class StatMonthlyComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  translate(key: string): string {
+    return this.translationService.translate(key);
+  }
+
+  formatCurrentMonth(): string {
+    const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 
+                       'july', 'august', 'september', 'october', 'november', 'december'];
+    const monthKey = monthNames[new Date().getMonth()];
+    const translatedMonth = this.translationService.translate(`months.${monthKey}`);
+    return `${translatedMonth} ${this.currentYear}`;
   }
 
   private loadCurrentMonthData(): void {
