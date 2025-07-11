@@ -298,4 +298,8 @@ export class StatDailyComponent implements OnInit, OnDestroy {
   changeTheme(): void {
     // theme changing logic here
   }
+
+  isExpenseFormValid(): boolean {
+    return !!(this.newExpense.description?.trim() && this.newExpense.amount && this.newExpense.amount > 0);
+  }
 }

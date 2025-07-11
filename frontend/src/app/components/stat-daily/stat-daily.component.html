@@ -83,7 +83,10 @@
       <button class="back-btn" (click)="cancelAddExpense()">
         ← {{ translate('common.back') }}
       </button>
-      <button class="save-btn" (click)="saveExpense()">
+      <button class="save-btn" 
+              (click)="saveExpense()"
+              [disabled]="!isExpenseFormValid()"
+              [class.disabled]="!isExpenseFormValid()">
         {{ translate('common.add') }}
       </button>
     </div>
