@@ -157,10 +157,14 @@ export class StatDailyComponent implements OnInit, OnDestroy {
 
   addExpense(): void {
     this.isAddingExpense = true;
-    // reset form
+    // Find entertainment category ID, fallback to first available category
+    const entertainmentCategory = this.allCategories.find(cat => cat.name.toLowerCase() === 'entertainment');
+    const defaultCategoryId = entertainmentCategory ? entertainmentCategory.id : (this.allCategories.length > 0 ? this.allCategories[0].id : 1);
+    
+    // reset form with entertainment as default category
     this.newExpense = {
       description: '',
-      categoryId: 1,
+      categoryId: defaultCategoryId,
       amount: 0
     };
   }
